@@ -1,0 +1,22 @@
+.button {
+  background-color: var(--bs-primary);
+  background-image: none; 
+  text-align: center;
+  cursor: pointer;
+  button {
+    outline: 0;
+    border: 0;
+    box-shadow: none;
+    
+    &:focus, &:visited, &:hover {
+      outline: 0 !important;
+      box-shadow: none !important; 
+      background-color: transparent !important;
+    }
+  }
+}
+.delete {
+  position: absolute;
+  right: 15px;
+  cursor: pointer;
+}
