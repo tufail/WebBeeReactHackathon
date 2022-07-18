@@ -46,20 +46,22 @@ function Home() {
           state.items &&
           state.items.map((item, i) => <ItemForm data={item} key={i} />)}
         <Col md={4} lg={3}>
-          <DropdownButton
-            variant={'primary'}
-            title="Add Item"
-            id="input-group-dropdown-1"
-          >
-            {machinetypes.map((type) => (
-              <Dropdown.Item
-                key={type.id}
-                onClick={() => addItemHandler(type.id)}
-              >
-                {type.name.value}
-              </Dropdown.Item>
-            ))}
-          </DropdownButton>
+          {state.machinetypes && state.machinetypes.length > 0 && (
+            <DropdownButton
+              variant={'primary'}
+              title="Add Item"
+              id="input-group-dropdown-1"
+            >
+              {machinetypes.map((type) => (
+                <Dropdown.Item
+                  key={type.id}
+                  onClick={() => addItemHandler(type.id)}
+                >
+                  {type.name.value}
+                </Dropdown.Item>
+              ))}
+            </DropdownButton>
+          )}
         </Col>
       </Row>
     </Container>
