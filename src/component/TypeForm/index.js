@@ -32,10 +32,15 @@ function TypeForm({ data }) {
 
   const changeTypeHandler = (name, value) => {
     let dataCopy = { ...data };
-    dataCopy[name] = {
-      ...dataCopy[name],
-    };
-    dataCopy[name].type = value;
+    if (value !== 'delete') {
+      dataCopy[name] = {
+        ...dataCopy[name],
+      };
+      dataCopy[name].type = value;
+    } else {
+      delete dataCopy[name];
+    }
+
     dispatch(handleTypeUpdate(dataCopy));
   };
 
@@ -128,7 +133,9 @@ function TypeForm({ data }) {
                       <option value="number">Number</option>
                       <option value="date">Date</option>
                       <option value="checkbox">Checkbox</option>
-                      <option value="delete">Delete</option>
+                      {key !== 'name' ? (
+                        <option value="delete">Delete</option>
+                      ) : null}
                     </Form.Select>
                   </InputGroup>
                 ) : null
