@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Row, Col, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 
 import ItemForm from '../component/ItemForm';
 import { uid } from '../utils';
@@ -41,29 +41,38 @@ function Home() {
 
   return (
     <Container className={styles.main} fluid>
-      <Row>
-        {state &&
-          state.items &&
-          state.items.map((item, i) => <ItemForm data={item} key={i} />)}
-        <Col md={4} lg={3}>
-          {state.machinetypes && state.machinetypes.length > 0 && (
-            <DropdownButton
-              variant={'primary'}
-              title="Add Item"
-              id="input-group-dropdown-1"
-            >
-              {machinetypes.map((type) => (
-                <Dropdown.Item
-                  key={type.id}
-                  onClick={() => addItemHandler(type.id)}
-                >
-                  {type.name.value}
-                </Dropdown.Item>
-              ))}
-            </DropdownButton>
-          )}
-        </Col>
-      </Row>
+      {machinetypes && machinetypes.length
+        ? machinetypes.map((category) => (
+            <div className={styles.categorySection}>
+              <Row>
+                <Col>
+                  <h4>{category.name.value}</h4>
+                  <hr />
+                </Col>
+              </Row>
+              <Row>
+                {state &&
+                  state.items &&
+                  state.items.map((item, i) =>
+                    item.typeId === category.id ? (
+                      <ItemForm
+                        data={item}
+                        titleField={category.modalTitle.value}
+                        title={category.name.value}
+                        typeData={category}
+                        key={item.id}
+                      />
+                    ) : null
+                  )}
+                <Col md={4} lg={3}>
+                  <Button onClick={() => addItemHandler(category.id)}>
+                    Add Item
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          ))
+        : null}
     </Container>
   );
 }

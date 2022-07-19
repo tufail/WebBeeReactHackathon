@@ -62,6 +62,7 @@ function ItemById(props) {
               titleField={category[0].modalTitle.value}
               data={item}
               title={category[0].name.value}
+              typeData={category[0]}
               key={i}
             />
           ))}

@@ -49,7 +49,7 @@ function TypeForm({ data }) {
     dataCopy[name] = {
       ...dataCopy[name],
     };
-    let slug = slugify(value, { lower: true });
+    let slug = slugify(`${value + uid()}`, { lower: true });
     dataCopy[name].name = slug;
     dataCopy[name].label = value;
     dispatch(handleTypeUpdate(dataCopy));
@@ -108,7 +108,7 @@ function TypeForm({ data }) {
                     ''
                   ) : (
                     <option value={data[key].name} key={index}>
-                      {data[key].name}
+                      {data[key].label}
                     </option>
                   )
                 )}

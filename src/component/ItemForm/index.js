@@ -6,7 +6,7 @@ import { Trash } from 'react-feather';
 import { allState, removeItem, updateItem } from '../../store/machines-slice';
 import styles from './ItemForm.module.scss';
 
-function ItemForm({ data, titleField, title }) {
+function ItemForm({ data, titleField, title, typeData }) {
   const dispatch = useDispatch();
   const state = useSelector(allState);
   let fieldTitleText = '';
@@ -27,7 +27,12 @@ function ItemForm({ data, titleField, title }) {
 
   function handleChangeItemField(e) {
     let name = e.target.name;
-    let valueItem = e.target.value || e.target.checked;
+    let valueItem =
+      e.target.type === 'checkbox'
+        ? e.target.checked
+          ? 'checked'
+          : 'unchecked'
+        : e.target.value;
     let dataUpdate = { ...data };
     let updateValue = dataUpdate.fieldData.map((item) => {
       let updateData = { ...item };
@@ -54,7 +59,37 @@ function ItemForm({ data, titleField, title }) {
         </Card.Header>
         <Card.Body>
           <Form>
-            {data &&
+            {typeof typeData === 'object' &&
+              Object.keys(typeData).map((field, i) =>
+                i > 2 ? (
+                  typeData[field].type === 'checkbox' ? (
+                    <Form.Group key={i} className="mb-3">
+                      <Form.Check
+                        type="checkbox"
+                        checked={
+                          data.fieldData[i].value === 'checked' ? true : false
+                        }
+                        name={typeData[field].name}
+                        label={typeData[field].label}
+                        onChange={handleChangeItemField}
+                      />
+                    </Form.Group>
+                  ) : (
+                    <Form.Group key={i} className="mb-3">
+                      <Form.Label>{typeData[field].label}</Form.Label>
+                      <Form.Control
+                        type={typeData[field].type}
+                        name={typeData[field].name}
+                        value={data.fieldData[i]?.value}
+                        onChange={handleChangeItemField}
+                      />
+                    </Form.Group>
+                  )
+                ) : (
+                  ''
+                )
+              )}
+            {/* {data &&
               data.fieldData.map((field) =>
                 field ? (
                   field.type === 'checkbox' ? (
@@ -80,7 +115,7 @@ function ItemForm({ data, titleField, title }) {
                     </Form.Group>
                   )
                 ) : null
-              )}
+              )} */}
           </Form>
         </Card.Body>
       </Card>
