@@ -1,22 +1,17 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Col, Card, Form } from 'react-bootstrap';
 import { Trash } from 'react-feather';
 
-import { allState, removeItem, updateItem } from '../../store/machines-slice';
+import { removeItem, updateItem } from '../../store/machines-slice';
 import styles from './ItemForm.module.scss';
 
 function ItemForm({ data, titleField, title, typeData }) {
   const dispatch = useDispatch();
-  const state = useSelector(allState);
   let fieldTitleText = '';
 
-  const category = state.machinetypes.length
-    ? state.machinetypes.filter((item) => item.id === data.typeId)
-    : '';
-
   data.fieldData.forEach((item) => {
-    if (item && item.name === (titleField || category[0]?.modalTitle?.value)) {
+    if (item && item.name === titleField) {
       fieldTitleText = item.value;
     }
   });
@@ -53,8 +48,7 @@ function ItemForm({ data, titleField, title, typeData }) {
     <Col md={4} lg={3}>
       <Card>
         <Card.Header>
-          {title || category[0]?.name?.value} -{' '}
-          {fieldTitleText ? fieldTitleText : 'Untitled'}
+          {title} - {fieldTitleText ? fieldTitleText : 'Untitled'}
           <Trash onClick={deleteHandler} size={18} className={styles.delete} />
         </Card.Header>
         <Card.Body>

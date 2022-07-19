@@ -104,9 +104,10 @@ function TypeForm({ data }) {
               >
                 <option>Select</option>
                 {Object.keys(data).map((key, index) =>
-                  key === 'id' || key === 'modalTitle' || key === 'title' ? (
-                    ''
-                  ) : (
+                  key === 'id' ||
+                  key === 'modalTitle' ||
+                  key === 'title' ||
+                  data[key].type !== 'text' ? null : (
                     <option value={data[key].name} key={index}>
                       {data[key].label}
                     </option>
