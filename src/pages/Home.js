@@ -43,7 +43,7 @@ function Home() {
     <Container className={styles.main} fluid>
       {machinetypes && machinetypes.length
         ? machinetypes.map((category) => (
-            <div className={styles.categorySection}>
+            <div className={styles.categorySection} key={category.id}>
               <Row>
                 <Col>
                   <h4>{category.name.value}</h4>
