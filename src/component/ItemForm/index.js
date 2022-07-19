@@ -67,7 +67,10 @@ function ItemForm({ data, titleField, title, typeData }) {
                       <Form.Check
                         type="checkbox"
                         checked={
-                          data.fieldData[i].value === 'checked' ? true : false
+                          typeof data.fieldData[i] === 'object' &&
+                          data.fieldData[i].value === 'checked'
+                            ? true
+                            : false
                         }
                         name={typeData[field].name}
                         label={typeData[field].label}
