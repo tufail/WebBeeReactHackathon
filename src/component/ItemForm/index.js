@@ -86,33 +86,6 @@ function ItemForm({ data, titleField, title, typeData }) {
                   ''
                 )
               )}
-            {/* {data &&
-              data.fieldData.map((field) =>
-                field ? (
-                  field.type === 'checkbox' ? (
-                    <Form.Group key={field.name} className="mb-3">
-                      <Form.Check
-                        value={field.value}
-                        type="checkbox"
-                        defaultChecked={field.value ? true : false}
-                        name={field.name}
-                        label={field.label}
-                        onChange={handleChangeItemField}
-                      />
-                    </Form.Group>
-                  ) : (
-                    <Form.Group key={field.name} className="mb-3">
-                      <Form.Label>{field.label}</Form.Label>
-                      <Form.Control
-                        type={field.type}
-                        name={field.name}
-                        value={field.value}
-                        onChange={handleChangeItemField}
-                      />
-                    </Form.Group>
-                  )
-                ) : null
-              )} */}
           </Form>
         </Card.Body>
       </Card>
