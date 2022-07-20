@@ -14,7 +14,7 @@ import slugify from 'slugify';
 import {
   handleTypeUpdate,
   handleTypeDelete,
-  updateItem,
+  updateAllItems,
   allState,
 } from '../../store/machines-slice';
 import styles from './TypeForm.module.scss';
@@ -38,18 +38,43 @@ function TypeForm({ data }) {
 
   const changeTypeHandler = (name, value) => {
     let dataCopy = { ...data };
-    let updatedItems = [];
     if (value !== 'delete') {
       dataCopy[name] = {
         ...dataCopy[name],
       };
       dataCopy[name].type = value;
     } else {
-      let items = [...state.items];
+      delete dataCopy[name];
+    }
+    dispatch(handleTypeUpdate(dataCopy));
+    updateItemOnChange(name, value);
+  };
+
+  const updateItemOnChange = (name, value) => {
+    let items = [...state.items];
+    let updatedItems = [];
+
+    if (value !== 'delete') {
+      updatedItems = items.map((item, i) => {
+        let updatedFields = { ...item };
+        let allfields = [...updatedFields.fieldData];
+        if (item.typeId === data.id) {
+          let allfieldsUpdated = allfields.map((field, i) => {
+            let updatedField = field ? { ...field } : null;
+            if (field && field.typeId === name) {
+              updatedField.type = value;
+            }
+            return updatedField;
+          });
+          updatedFields.fieldData = allfieldsUpdated;
+        }
+        return updatedFields;
+      });
+    } else {
       updatedItems = items.map((item) => {
         if (item.typeId === data.id) {
           item.fieldData.map((field, i) => {
-            if (field.name === name) {
+            if (field && field.name === name) {
               delete item.fieldData[i];
             }
             return field;
@@ -57,10 +82,9 @@ function TypeForm({ data }) {
         }
         return item;
       });
-      delete dataCopy[name];
     }
-    if (updatedItems.length) dispatch(updateItem(updatedItems));
-    dispatch(handleTypeUpdate(dataCopy));
+
+    if (updatedItems.length) dispatch(updateAllItems(updatedItems));
   };
 
   const changeNameHandler = (name, value) => {
@@ -69,8 +93,28 @@ function TypeForm({ data }) {
       ...dataCopy[name],
     };
     let slug = slugify(`${value + uid()}`, { lower: true });
+    let items = [...state.items];
+    let updatedItems = items.map((item) => {
+      let updateItem = { ...item };
+      let updatedField = updateItem.fieldData.map((field, i) => {
+        let fieldItem = field ? { ...field } : null;
+        if (
+          field &&
+          field.typeId === dataCopy.id &&
+          field.name === dataCopy[name].name
+        ) {
+          fieldItem.name = slug;
+          fieldItem.label = value;
+        }
+        return fieldItem;
+      });
+      updateItem.fieldData = updatedField;
+      return updateItem;
+    });
+
     dataCopy[name].name = slug;
     dataCopy[name].label = value;
+    dispatch(updateAllItems(updatedItems));
     dispatch(handleTypeUpdate(dataCopy));
   };
 

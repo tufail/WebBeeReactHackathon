@@ -83,6 +83,9 @@ const machinesSlice = createSlice({
       items[index] = action.payload;
       state.items = [...items];
     },
+    updateAllItems: (state, action) => {
+      state.items = [...action.payload];
+    },
   },
 });
 
@@ -94,5 +97,6 @@ export const {
   addItem,
   removeItem,
   updateItem,
+  updateAllItems,
 } = machinesSlice.actions;
 export default machinesSlice.reducer;

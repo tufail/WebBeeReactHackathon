@@ -10,7 +10,7 @@ import styles from './ItemById/ItemById.module.scss';
 function Home() {
   const dispatch = useDispatch();
   const state = useSelector(allState);
-  const { machinetypes } = state;
+  const { machinetypes, items } = state;
 
   function addItemHandler(typeId) {
     const category = state.machinetypes.length
@@ -51,9 +51,8 @@ function Home() {
                 </Col>
               </Row>
               <Row>
-                {state &&
-                  state.items &&
-                  state.items.map((item, i) =>
+                {items &&
+                  items.map((item, i) =>
                     item.typeId === category.id ? (
                       <ItemForm
                         data={item}

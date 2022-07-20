@@ -12,15 +12,15 @@ function ItemById(props) {
   const params = useParams();
   const dispatch = useDispatch();
   const state = useSelector(allState);
-
+  const items = [...state.items];
   const category = state.machinetypes.length
     ? state.machinetypes.filter((item) => item.id === params.id)
     : '';
 
   if (category.length === 0) return <div>No Items</div>;
 
-  const singleTypeData = state.items.length
-    ? state.items.filter((item) => item.typeId === params.id)
+  const singleTypeData = items.length
+    ? items.filter((item) => item.typeId === params.id)
     : [];
 
   function addItemHandler() {

@@ -4,6 +4,7 @@ import { Col, Card, Form } from 'react-bootstrap';
 import { Trash } from 'react-feather';
 
 import { removeItem, updateItem } from '../../store/machines-slice';
+import ItemFields from '../ItemFields';
 import styles from './ItemForm.module.scss';
 
 function ItemForm({ data, titleField, title, typeData }) {
@@ -21,7 +22,6 @@ function ItemForm({ data, titleField, title, typeData }) {
   }
 
   function handleChangeItemField(e) {
-    debugger;
     let name = e.target.name;
     let valueItem =
       e.target.type === 'checkbox'
@@ -48,13 +48,16 @@ function ItemForm({ data, titleField, title, typeData }) {
       dataUpdate.fieldData = [...updateValue];
     } else {
       let allFields = [...dataUpdate.fieldData];
+      let objType = Object.keys(typeData).find(
+        (key) => typeData[key].name === name
+      );
       dataUpdate.fieldData = [
         ...allFields,
         {
           name: name,
           value: valueItem,
-          label: typeData.label,
-          type: typeData.type,
+          label: typeData[objType].label,
+          type: typeData[objType].type,
           typeId: typeData.id,
         },
       ];
@@ -72,39 +75,11 @@ function ItemForm({ data, titleField, title, typeData }) {
         </Card.Header>
         <Card.Body>
           <Form>
-            {typeof typeData === 'object' &&
-              Object.keys(typeData).map((field, i) =>
-                i > 2 ? (
-                  typeData[field].type === 'checkbox' ? (
-                    <Form.Group key={i} className="mb-3">
-                      <Form.Check
-                        type="checkbox"
-                        checked={
-                          typeof data.fieldData[i] === 'object' &&
-                          data.fieldData[i].value === 'checked'
-                            ? true
-                            : false
-                        }
-                        name={typeData[field].name}
-                        label={typeData[field].label}
-                        onChange={handleChangeItemField}
-                      />
-                    </Form.Group>
-                  ) : (
-                    <Form.Group key={i} className="mb-3">
-                      <Form.Label>{typeData[field].label}</Form.Label>
-                      <Form.Control
-                        type={typeData[field].type}
-                        name={typeData[field].name}
-                        value={data.fieldData[i]?.value}
-                        onChange={handleChangeItemField}
-                      />
-                    </Form.Group>
-                  )
-                ) : (
-                  ''
-                )
-              )}
+            <ItemFields
+              onChange={handleChangeItemField}
+              fields={data.fieldData}
+              typeData={typeData}
+            />
           </Form>
         </Card.Body>
       </Card>
