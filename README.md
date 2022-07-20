@@ -1,6 +1,6 @@
 # Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and Problem statement you can find [https://github.com/webbeetechnologies/ReactHackathon](https://github.com/webbeetechnologies/ReactHackathon)
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and problem statement you can find [https://github.com/webbeetechnologies/ReactHackathon](https://github.com/webbeetechnologies/ReactHackathon)
 
 ## Available Scripts
 
