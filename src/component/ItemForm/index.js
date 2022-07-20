@@ -21,6 +21,7 @@ function ItemForm({ data, titleField, title, typeData }) {
   }
 
   function handleChangeItemField(e) {
+    debugger;
     let name = e.target.name;
     let valueItem =
       e.target.type === 'checkbox'
@@ -29,18 +30,36 @@ function ItemForm({ data, titleField, title, typeData }) {
           : 'unchecked'
         : e.target.value;
     let dataUpdate = { ...data };
-    let updateValue = dataUpdate.fieldData.map((item) => {
-      let updateData = { ...item };
-      if (item) {
-        if (updateData && updateData.name === name) {
-          updateData.value = valueItem;
+    let isExist = dataUpdate.fieldData.findIndex(
+      (item) => item && item.name === name
+    );
+    if (isExist > -1) {
+      let updateValue = dataUpdate.fieldData.map((item) => {
+        let updateData = { ...item };
+        if (item) {
+          if (updateData && updateData.name === name) {
+            updateData.value = valueItem;
+          }
+          return updateData;
+        } else {
+          return null;
         }
-        return updateData;
-      } else {
-        return null;
-      }
-    });
-    dataUpdate.fieldData = [...updateValue];
+      });
+      dataUpdate.fieldData = [...updateValue];
+    } else {
+      let allFields = [...dataUpdate.fieldData];
+      dataUpdate.fieldData = [
+        ...allFields,
+        {
+          name: name,
+          value: valueItem,
+          label: typeData.label,
+          type: typeData.type,
+          typeId: typeData.id,
+        },
+      ];
+    }
+
     dispatch(updateItem(dataUpdate));
   }
 

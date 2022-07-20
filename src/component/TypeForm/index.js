@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Col,
   Card,
@@ -11,12 +11,18 @@ import {
 import { Trash } from 'react-feather';
 import slugify from 'slugify';
 
-import { handleTypeUpdate, handleTypeDelete } from '../../store/machines-slice';
+import {
+  handleTypeUpdate,
+  handleTypeDelete,
+  updateItem,
+  allState,
+} from '../../store/machines-slice';
 import styles from './TypeForm.module.scss';
 import { uid } from '../../utils';
 
 function TypeForm({ data }) {
   const dispatch = useDispatch();
+  const state = useSelector(allState);
   const [typeValue, setTypeValue] = useState('Type Title');
 
   function changeHandler(e) {
@@ -32,15 +38,28 @@ function TypeForm({ data }) {
 
   const changeTypeHandler = (name, value) => {
     let dataCopy = { ...data };
+    let updatedItems = [];
     if (value !== 'delete') {
       dataCopy[name] = {
         ...dataCopy[name],
       };
       dataCopy[name].type = value;
     } else {
+      let items = [...state.items];
+      updatedItems = items.map((item) => {
+        if (item.typeId === data.id) {
+          item.fieldData.map((field, i) => {
+            if (field.name === name) {
+              delete item.fieldData[i];
+            }
+            return field;
+          });
+        }
+        return item;
+      });
       delete dataCopy[name];
     }
-
+    if (updatedItems.length) dispatch(updateItem(updatedItems));
     dispatch(handleTypeUpdate(dataCopy));
   };
 
